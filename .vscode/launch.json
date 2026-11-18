@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "EL PARCHE: depurar en Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5180",
+      "webRoot": "${workspaceFolder}/src",
+      "preLaunchTask": "EL PARCHE: arrancar app (Vite)"
+    }
+  ]
+}

@@ -1,0 +1,708 @@
+@import 'tailwindcss';
+
+/* ==================================================================
+   EL PARCHE — SISTEMA DE DISEÑO v2
+   Estética street food / urbana / graffiti.
+   Base: negro carbón + crema. Identidad: ROJO + AMARILLO (degradados).
+   Naranja, magenta, verde ácido y morado = acentos y stickers.
+   El token `cyan` se conserva por compatibilidad pero no se usa en la UI.
+   ================================================================== */
+
+@theme {
+  /* ---------------- Base ---------------- */
+  --color-ink: #0b0b0d;
+  --color-carbon: #111111;
+  --color-graphite: #191a1d;
+  --color-cement: #26272c;
+  --color-steel: #383a41;
+  --color-concrete: #8a8c96;
+  --color-ash: #b6b8c2;
+  --color-bone: #f4f0e8;
+  --color-cream: #f4f0e8;
+
+  /* ------------- Identidad --------------
+     Rojo + amarillo: la paleta del negocio. El azul anterior queda
+     fuera de la interfaz (solo se mantiene el token como alias legado). */
+  --color-red: #e4002b;
+  --color-red-deep: #a80020;
+  --color-red-bright: #ff3b2f;
+  --color-primary: #e4002b;
+  --color-primary-deep: #a80020;
+  --color-orange: #ff6a00;
+  --color-orange-deep: #d85500;
+  --color-accent: #ff6a00;
+  --color-yellow: #ffd21f;
+  --color-yellow-deep: #e0b000;
+  --color-magenta: #ff2d7a;
+  --color-acid: #a8e600;
+  --color-violet: #7a3cff;
+  --color-cyan: #35c9ff;
+
+  /* ---- Alias legado (compatibilidad con componentes existentes) ---- */
+  --color-volt: #ffd21f;
+  --color-volt-deep: #e0b800;
+  --color-flame: #ff6a00;
+  --color-lime: #a8e600;
+  --color-grape: #7a3cff;
+
+  /* ------------ Tipografía (2 familias) ------------ */
+  --font-display: 'Anton', 'Archivo Black', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-marker: 'Anton', system-ui, sans-serif;
+
+  --radius-card: 22px;
+
+  /* ---------------- Sombras ---------------- */
+  --shadow-primary: 0 10px 34px -8px rgba(228, 0, 43, 0.75);
+  --shadow-orange: 0 10px 34px -8px rgba(255, 106, 0, 0.65);
+  --shadow-volt: 0 8px 30px -6px rgba(255, 210, 31, 0.5);
+  --shadow-pop: 0 18px 50px -12px rgba(0, 0, 0, 0.9);
+  --shadow-sticker:
+    3px 3px 0 #111111,
+    0 10px 26px -10px rgba(0, 0, 0, 0.95);
+
+  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ------------- Animaciones ------------- */
+  --animate-pop: pop 0.28s var(--ease-snap);
+  --animate-slide-up: slideUp 0.32s var(--ease-snap);
+  --animate-slide-in: slideIn 0.28s var(--ease-snap);
+  --animate-fade: fade 0.22s ease-out;
+  --animate-shimmer: shimmer 1.4s linear infinite;
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-spray: spray 0.5s var(--ease-snap);
+  --animate-pulse-ring: pulseRing 1.8s ease-out infinite;
+  --animate-marquee: marquee 22s linear infinite;
+  --animate-spray-puff: sprayPuff 2.4s ease-out infinite;
+  --animate-wiggle: wiggle 3.5s ease-in-out infinite;
+  --animate-sticker: stickerIn 0.34s var(--ease-snap) both;
+  --animate-tag-in: tagIn 0.42s var(--ease-snap) both;
+  --animate-splash: splash 0.6s ease-out forwards;
+  --animate-bump: bump 0.36s var(--ease-snap);
+  --animate-mascot-bounce: mascotBounce 0.55s var(--ease-snap);
+  --animate-mascot-pop: mascotPop 0.34s var(--ease-snap) both;
+  --animate-mascot-idle: mascotIdle 4.5s ease-in-out infinite;
+  --animate-mascot-ripple: mascotRipple 0.7s ease-out forwards;
+  --animate-mascot-float: mascotFloat 3.6s ease-out infinite;
+  --animate-mascot-shake: mascotShake 0.5s var(--ease-snap);
+  --animate-particle: mascotParticle 0.75s ease-out forwards;
+}
+
+/* Rebote con squash & stretch al tocar la mascota. */
+@keyframes mascotBounce {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  28% {
+    transform: scale(1.13, 0.87) translateY(7px);
+  }
+  55% {
+    transform: scale(0.93, 1.09) translateY(-16px);
+  }
+  76% {
+    transform: scale(1.04, 0.97) translateY(0);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes mascotPop {
+  0% {
+    transform: scale(0.7) rotate(-7deg);
+    opacity: 0;
+  }
+  62% {
+    transform: scale(1.07) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+/* Respiración sutil mientras está quieta. */
+@keyframes mascotIdle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-1.2deg);
+  }
+}
+/* Partículas de aerosol al tocar. */
+@keyframes mascotParticle {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.15);
+    opacity: 0;
+  }
+}
+/* Onda que se expande al tocar la mascota. */
+@keyframes mascotRipple {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+/* Emojis que suben flotando alrededor de la mascota. */
+@keyframes mascotFloat {
+  0% {
+    transform: translateY(14px) scale(0.5) rotate(-6deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(-104px) scale(1.05) rotate(6deg);
+    opacity: 0;
+  }
+}
+/* Sacudida corta cuando la mascota reacciona. */
+@keyframes mascotShake {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-5px) rotate(-3deg);
+  }
+  40% {
+    transform: translateX(5px) rotate(3deg);
+  }
+  60% {
+    transform: translateX(-4px) rotate(-2deg);
+  }
+  80% {
+    transform: translateX(4px) rotate(2deg);
+  }
+}
+
+/* Quien prefiere menos movimiento no ve los bucles continuos. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-mascot-idle,
+  .animate-mascot-float,
+  .animate-spray-puff,
+  .animate-wiggle {
+    animation: none !important;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -480px 0;
+  }
+  100% {
+    background-position: 480px 0;
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1.5deg);
+  }
+}
+@keyframes spray {
+  0% {
+    transform: scale(0.4) rotate(-8deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes pulseRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(228, 0, 43, 0.65);
+  }
+  100% {
+    box-shadow: 0 0 0 18px rgba(228, 0, 43, 0);
+  }
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes sprayPuff {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  35% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+/* Calcomanía que se pega: entra girando y sobrepasando. */
+@keyframes stickerIn {
+  0% {
+    transform: scale(0.4) rotate(-22deg);
+    opacity: 0;
+  }
+  62% {
+    transform: scale(1.12) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+/* Lettering que aparece como pintado de izquierda a derecha. */
+@keyframes tagIn {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-8px) rotate(-3deg);
+    opacity: 0.2;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes splash {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+@keyframes bump {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.28) rotate(-6deg);
+  }
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.005em;
+  }
+  ::selection {
+    background: var(--color-red);
+    color: #fff;
+  }
+  input,
+  textarea,
+  select,
+  button {
+    font-family: inherit;
+  }
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2a2b31;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a3b42;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ==================================================================
+   UTILIDADES
+   ================================================================== */
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@utility safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* ----------------------- Fondos urbanos ----------------------- */
+
+/* Mural de fondo: concreto + halos de color de marca, muy sutil. */
+@utility bg-mural {
+  background-color: var(--color-ink);
+  background-image:
+    radial-gradient(900px 620px at 10% -12%, rgba(228, 0, 43, 0.12), transparent 62%),
+    radial-gradient(820px 560px at 102% 2%, rgba(255, 106, 0, 0.09), transparent 58%),
+    radial-gradient(760px 620px at 50% 112%, rgba(255, 210, 31, 0.06), transparent 62%);
+}
+
+@utility texture-concrete {
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.04) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 72% 68%, rgba(255, 255, 255, 0.035) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 44% 88%, rgba(0, 0, 0, 0.38) 0 2px, transparent 3px),
+    radial-gradient(circle at 88% 14%, rgba(255, 255, 255, 0.028) 0 1px, transparent 2px);
+  background-size:
+    42px 42px,
+    56px 56px,
+    64px 64px,
+    38px 38px;
+}
+
+@utility texture-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@utility texture-brick {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.032) 2px, transparent 2px),
+    linear-gradient(rgba(0, 0, 0, 0.5) 2px, transparent 2px);
+  background-size:
+    68px 34px,
+    68px 34px,
+    68px 34px,
+    68px 34px;
+  background-position:
+    0 0,
+    0 0,
+    34px 17px,
+    0 17px;
+}
+
+@utility texture-chain {
+  background-image:
+    repeating-linear-gradient(45deg, transparent 0 7px, rgba(255, 255, 255, 0.07) 7px 8px),
+    repeating-linear-gradient(-45deg, transparent 0 7px, rgba(255, 255, 255, 0.07) 7px 8px);
+}
+
+@utility texture-halftone {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1.5px);
+  background-size: 10px 10px;
+}
+
+@utility texture-paper {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 4px),
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.04) 0 2px, transparent 3px);
+  background-size:
+    100% 4px,
+    48px 48px;
+}
+
+/* Rayado diagonal tipo tag de marcador. */
+@utility texture-hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.05) 0 2px,
+    transparent 2px 9px
+  );
+}
+
+/* Malla de puntos de aerosol (para sellos y esquinas). */
+@utility texture-spray {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 0.7px, transparent 1.3px);
+  background-size: 7px 7px;
+}
+
+/* ----------------------- Lettering graffiti ----------------------- */
+
+/*
+ * Lettering graffiti: contorno negro grueso + rim crema + volumen 3D.
+ * Se usa `filter: drop-shadow` y no `text-shadow` porque el relleno es un
+ * degradado con `color: transparent`: un text-shadow se vería a través de las
+ * letras y lavaría el color.
+ */
+@utility tag-3d {
+  -webkit-text-stroke: 0.095em var(--color-ink);
+  paint-order: stroke fill;
+  filter: drop-shadow(0.045em 0.045em 0 var(--color-ink))
+    drop-shadow(0 0 0.08em rgba(244, 240, 232, 0.8));
+}
+
+/* Versión compacta: contorno más fino para tamaños pequeños (logo en barra). */
+@utility tag-3d-sm {
+  -webkit-text-stroke: 0.05em var(--color-ink);
+  paint-order: stroke fill;
+  filter: drop-shadow(0.03em 0.03em 0 var(--color-ink))
+    drop-shadow(0 0 0.05em rgba(244, 240, 232, 0.7));
+}
+
+@utility tag-outline {
+  -webkit-text-stroke: 0.09em var(--color-ink);
+  paint-order: stroke fill;
+  text-shadow: 0 0 0.16em rgba(244, 240, 232, 0.85);
+}
+
+@utility tag-outline-sm {
+  -webkit-text-stroke: 0.045em var(--color-ink);
+  paint-order: stroke fill;
+}
+
+/* Versión sin halo, para superficies claras. */
+@utility tag-3d-flat {
+  -webkit-text-stroke: 0.085em var(--color-ink);
+  paint-order: stroke fill;
+  text-shadow: 0.055em 0.055em 0 rgba(17, 17, 17, 0.35);
+}
+
+@utility tag-fill-yellow {
+  background-image: linear-gradient(178deg, #ffe680 0%, #ffd21f 42%, #ff8a00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Degradado insignia de la marca: amarillo → naranja → rojo. */
+@utility tag-fill-fire {
+  background-image: linear-gradient(176deg, #ffe680 0%, #ffd21f 22%, #ff6a00 62%, #e4002b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility tag-fill-red {
+  background-image: linear-gradient(176deg, #ff6a00 0%, #e4002b 45%, #a80020 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* alias legado */
+@utility tag-fill-blue {
+  background-image: linear-gradient(176deg, #ffe680 0%, #ffd21f 22%, #ff6a00 62%, #e4002b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility tag-fill-hot {
+  background-image: linear-gradient(178deg, #ffd21f 0%, #ff6a00 52%, #ff2d7a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility tag-tilt {
+  transform: rotate(-2.5deg);
+}
+
+@utility tag-tilt-r {
+  transform: rotate(2deg);
+}
+
+/* ----------------------- Stickers ----------------------- */
+
+@utility tape {
+  clip-path: polygon(2% 10%, 97% 0%, 100% 86%, 95% 100%, 3% 94%, 0% 16%);
+}
+
+@utility sticker-text {
+  -webkit-text-stroke: 3px var(--color-ink);
+  paint-order: stroke fill;
+}
+
+/* Trama de impresión encima de la calcomanía. */
+@utility sticker-print {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.18) 0.5px, transparent 1.2px);
+  background-size: 4px 4px;
+}
+
+/* Bordes irregulares (efecto recorte a mano). */
+@utility torn-1 {
+  clip-path: polygon(
+    1% 9%,
+    31% 2%,
+    63% 10%,
+    99% 3%,
+    97% 45%,
+    100% 89%,
+    63% 97%,
+    32% 91%,
+    2% 99%,
+    0% 54%
+  );
+}
+
+@utility torn-2 {
+  clip-path: polygon(0% 13%, 43% 1%, 77% 9%, 100% 0%, 99% 51%, 94% 100%, 57% 93%, 21% 99%, 3% 87%);
+}
+
+@utility torn-3 {
+  clip-path: polygon(3% 0%, 52% 6%, 100% 0%, 96% 40%, 100% 76%, 55% 100%, 14% 94%, 0% 58%);
+}
+
+@utility spray-edge {
+  mask-image: radial-gradient(circle at 50% 50%, #000 55%, transparent 100%);
+}
+
+@utility graffiti-stroke {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(228, 0, 43, 0.9) 12%,
+    rgba(255, 210, 31, 0.4) 42%,
+    transparent 62%
+  );
+}
+
+@utility graffiti-stroke-warm {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 106, 0, 0.9) 14%,
+    rgba(255, 45, 122, 0.35) 44%,
+    transparent 64%
+  );
+}
+
+/* ----------------------- Estados ----------------------- */
+
+@utility skeleton {
+  background: linear-gradient(90deg, #17181b 0%, #24262b 40%, #17181b 80%);
+  background-size: 480px 100%;
+  animation: var(--animate-shimmer);
+}
+
+@utility text-stroke {
+  -webkit-text-stroke: 2px var(--color-red);
+  color: transparent;
+}
+
+@utility text-stroke-thin {
+  -webkit-text-stroke: 1.4px rgba(244, 240, 232, 0.85);
+  color: transparent;
+}
+
+@utility scroll-px {
+  scroll-padding-inline: 1rem;
+}
+
+/* ----------------------- Impresión (facturas) ----------------------- */
+
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+}

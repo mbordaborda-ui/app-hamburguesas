@@ -1,0 +1,19 @@
+﻿IMAGENES DE LA MASCOTA (OPCIONAL)
+================================
+
+La mascota se dibuja con SVG propio (src/components/mascot/MascotGlyph.tsx),
+asi que NO necesitas imagenes: ya tiene sus 6 actitudes con poses, accesorios
+y expresiones distintas.
+
+Si algun dia quieres reemplazar el dibujo por arte tuyo, suelta el PNG aqui
+con estos nombres exactos y la app lo usara automaticamente:
+
+  1-tranqui.png      TRANQUI      "¿QUÉ MÁS, PARCE?"
+  2-bandida.png      BANDIDA      "HOY SE PECÓ."
+  3-pesada.png       PESADA       "¿SEGURO QUE PUEDES?"
+  4-en-llamas.png    EN LLAMAS    "ESTO ESTÁ CALIENTE."
+  5-delivery.png     DELIVERY     "VOY PA' TU CASA."
+  6-hambrienta.png   HAMBRIENTA   "NO COMPARTO."
+
+Recomendado: PNG con fondo transparente, 800x800, la burger centrada.
+Si un archivo no existe, se dibuja el SVG de esa actitud.
